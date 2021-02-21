@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/build",
+  "command": "/usr/bin/gcc -DGS_BUILD_DRAFT_API -I../src -I../include -I. -g -fPIC -o CMakeFiles/gs_objects.dir/src/shouter.c.o -c /home/ttrocha/_dev/projects/zeromq/getting_started/zproject/src/shouter.c",
+  "file": "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/src/shouter.c"
+},
+{
+  "directory": "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/build",
+  "command": "/usr/bin/gcc -DGS_BUILD_DRAFT_API -I../src -I../include -I. -g -fPIC -o CMakeFiles/gs_objects.dir/src/gs_private_selftest.c.o -c /home/ttrocha/_dev/projects/zeromq/getting_started/zproject/src/gs_private_selftest.c",
+  "file": "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/src/gs_private_selftest.c"
+},
+{
+  "directory": "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/build",
+  "command": "/usr/bin/gcc -DGS_BUILD_DRAFT_API -I../src -I../include -I. -g -o CMakeFiles/starter.dir/src/starter.c.o -c /home/ttrocha/_dev/projects/zeromq/getting_started/zproject/src/starter.c",
+  "file": "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/src/starter.c"
+},
+{
+  "directory": "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/build",
+  "command": "/usr/bin/gcc -DGS_BUILD_DRAFT_API -I../src -I../include -I. -g -o CMakeFiles/gs_selftest.dir/src/gs_selftest.c.o -c /home/ttrocha/_dev/projects/zeromq/getting_started/zproject/src/gs_selftest.c",
+  "file": "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/src/gs_selftest.c"
+}
+]

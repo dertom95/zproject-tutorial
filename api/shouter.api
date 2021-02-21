@@ -1,0 +1,27 @@
+<class name = "shouter">
+    The shouter-class the one and only way to shout!
+
+    <constant name = "DEFAULT_SHOUT" type="string" value = "HOORAY!">The default shout</constant>
+    <constant name = "some_int" value="1895">This is an int constant</constant>
+
+    <constructor>
+        Create a new shouter
+        <argument name = "name" type = "string" />
+    </constructor>
+
+    <destructor>
+    </destructor>
+
+    <method name = "shout">
+    Shout once!
+        <argument name="shout_text" type="string">The text to be shoutet</argument>
+        <return type="integer"/>
+    </method>
+
+    <method name = "shout_multi">
+    Shout multiple times!
+        <argument name="shout_text" type="string">The text to be shoutet</argument>
+        <argument name="times" type="integer">The amount of times shouting the text!</argument>
+        <return type="integer">Return the amount of times shouted</return>
+    </method>
+</class>
