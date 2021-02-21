@@ -357,7 +357,7 @@ AM_CONDITIONAL(ENABLE_DIST_CMAKEFILES, test "x$enable_dist_cmakefiles" = "xyes")
 # Check for starter intent
 AC_ARG_ENABLE([starter],
     AS_HELP_STRING([--enable-starter],
-        [Compile 'starter' in src [default=yes]]),
+        [Compile and install 'starter' [default=yes]]),
     [enable_starter=$enableval],
     [enable_starter=yes])
 

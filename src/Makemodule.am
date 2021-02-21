@@ -47,7 +47,7 @@ endif
 src_libgs_la_LIBADD = ${project_libs}
 
 if ENABLE_STARTER
-noinst_PROGRAMS += src/starter
+bin_PROGRAMS += src/starter
 src_starter_CPPFLAGS = ${AM_CPPFLAGS}
 src_starter_LDADD = ${program_libs}
 src_starter_SOURCES = src/starter.c

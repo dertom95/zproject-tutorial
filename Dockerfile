@@ -9,7 +9,7 @@ RUN useradd -d /home/zmq -m -s /bin/bash zmq
 RUN echo "zmq ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 WORKDIR /tmp
-RUN git clone --quiet https://your.git.com/you/someproject.git gs
+RUN git clone --quiet https://github.com/dertom95/zproject-tutorial.git gs
 WORKDIR /tmp/gs
 RUN ./autogen.sh 2> /dev/null
 RUN ./configure --quiet --without-docs

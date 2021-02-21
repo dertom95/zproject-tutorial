@@ -6,7 +6,7 @@
 all-local: doc
 
 # Public programs ("main" tags in project.xml), auto-regenerated:
-MAN1 =
+MAN1 = starter.1
 # Public classes ("class" tags in project.xml), auto-regenerated:
 MAN3 = shouter.3
 # Project overview, written by a human after initial skeleton:
@@ -71,6 +71,11 @@ shouter.txt: $(top_srcdir)/src/shouter.c
 ### Note: for mains, we keep the source name rather than flattened name:c
 ### so that the manpages for binary programs match their name, at expense
 ### of perhaps being built in a subdirectory under doc/.
+GENERATED_DOCS += starter.txt starter.doc
+starter.txt: $(top_srcdir)/src/starter.c
+	mkdir -p "$(builddir)/$(@D)"
+	"$(srcdir)/mkman" "starter" "$(builddir)/starter.txt" "$(srcdir)/.."
+
 
 clean-local:
 	rm -f *.1 *.3 *.7 $(GENERATED_DOCS)

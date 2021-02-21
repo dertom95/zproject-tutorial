@@ -319,6 +319,9 @@ target_link_libraries(
     ${OPTIONAL_LIBRARIES_STATIC}
 )
 endif()
+install(TARGETS starter
+    RUNTIME DESTINATION bin
+)
 add_executable(
     gs_selftest
     "${SOURCE_DIR}/src/gs_selftest.c"

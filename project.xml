@@ -1,9 +1,9 @@
 <project script     = "zproject.gsl" 
-         repository = "https://your.git.com/you/someproject.git"
+         repository = "https://github.com/dertom95/zproject-tutorial.git"
          name       = "gs">
     <version major = "1" minor = "1" patch = "0" />
     <class name = "shouter"/>
-    <main name = "starter" private = "1" />
+    <main name = "starter" />
 
     <target name="docker"/>
 </project>
