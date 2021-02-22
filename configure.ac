@@ -13,7 +13,7 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.61)
 #
-AC_INIT([gs],[1.1.0],[email@hostname.com])
+AC_INIT([zprotut],[1.1.0],[email@hostname.com])
 
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(config)
@@ -26,11 +26,11 @@ PV_MAJOR=`echo $PACKAGE_VERSION | cut -d . -f 1`
 PV_MINOR=`echo $PACKAGE_VERSION | cut -d . -f 2`
 PV_PATCH=`echo $PACKAGE_VERSION | cut -d . -f 3`
 AC_DEFINE_UNQUOTED([PACKAGE_VERSION_MAJOR],[$PV_MAJOR],
-    [GS major version])
+    [ZPROTUT major version])
 AC_DEFINE_UNQUOTED([PACKAGE_VERSION_MINOR],[$PV_MINOR],
-    [GS minor version])
+    [ZPROTUT minor version])
 AC_DEFINE_UNQUOTED([PACKAGE_VERSION_PATCH],[$PV_PATCH],
-    [GS patchlevel])
+    [ZPROTUT patchlevel])
 # This lets us use PACKAGE_VERSION in Makefiles
 AC_SUBST(PACKAGE_VERSION)
 
@@ -41,7 +41,7 @@ AC_SUBST(PACKAGE_VERSION)
 # know exactly what you're doing and have read and understand
 # http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
 #
-# libgs -version-info
+# libzprotut -version-info
 LTVER="0:0:0"
 AC_SUBST(LTVER)
 
@@ -49,7 +49,7 @@ AC_SUBST(LTVER)
 AM_CONDITIONAL([USING_VPATH], [test "x${srcdir}" != "x."])
 
 # Capture c flags
-GS_ORIG_CFLAGS="${CFLAGS:-none}"
+ZPROTUT_ORIG_CFLAGS="${CFLAGS:-none}"
 
 # Checks for programs
 AC_PROG_CC
@@ -73,13 +73,13 @@ AM_CONDITIONAL(WITH_CPPCHECK, $WITH_CPPCHECK)
 AC_MSG_CHECKING([whether to enable GCov])
 AC_ARG_WITH(gcov, [AS_HELP_STRING([--with-gcov=yes/no],
                   [With GCC Code Coverage reporting])],
-                  [GS_GCOV="$withval"])
+                  [ZPROTUT_GCOV="$withval"])
 
-if test "x${GS_GCOV}" == "xyes"; then
+if test "x${ZPROTUT_GCOV}" == "xyes"; then
     CFLAGS="-O0 -g -fprofile-arcs -ftest-coverage"
 
-    if test "x${GS_ORIG_CFLAGS}" != "xnone"; then
-        CFLAGS="${CFLAGS} ${GS_ORIG_CFLAGS}"
+    if test "x${ZPROTUT_ORIG_CFLAGS}" != "xnone"; then
+        CFLAGS="${CFLAGS} ${ZPROTUT_ORIG_CFLAGS}"
     fi
     AM_CONDITIONAL(WITH_GCOV, true)
     AC_MSG_RESULT([yes])
@@ -92,9 +92,9 @@ fi
 AC_MSG_CHECKING([whether to enable ASan])
 AC_ARG_ENABLE(address-sanitizer, [AS_HELP_STRING([--enable-address-sanitizer=yes/no],
                   [Build with GCC Address Sanitizer instrumentation])],
-                  [GS_ASAN="$enableval"])
+                  [ZPROTUT_ASAN="$enableval"])
 
-if test "x${GS_ASAN}" == "xyes"; then
+if test "x${ZPROTUT_ASAN}" == "xyes"; then
     CFLAGS="${CFLAGS} -fsanitize=address"
     CXXFLAGS="${CXXFLAGS} -fsanitize=address"
 
@@ -166,11 +166,11 @@ AC_SUBST(pkg_config_libs_private, $PKGCFG_LIBS_PRIVATE)
 AC_SUBST(pkg_config_names_private, $PKGCFG_NAMES_PRIVATE)
 
 # Platform specific checks
-gs_on_mingw32="no"
-gs_on_cygwin="no"
-gs_on_android="no"
-gs_on_linux="no"
-gs_on_gnu="no"
+zprotut_on_mingw32="no"
+zprotut_on_cygwin="no"
+zprotut_on_android="no"
+zprotut_on_linux="no"
+zprotut_on_gnu="no"
 
 # Host specific checks
 AC_CANONICAL_HOST
@@ -183,49 +183,49 @@ AC_ARG_WITH([docs],
     [with_docs=$withval])
 
 if test "x$with_docs" = "xno"; then
-    gs_build_doc="no"
-    gs_install_man="no"
+    zprotut_build_doc="no"
+    zprotut_install_man="no"
 else
     # Determine whether or not documentation should be built and installed.
-    gs_build_doc="yes"
-    gs_install_man="yes"
+    zprotut_build_doc="yes"
+    zprotut_install_man="yes"
 
     # Check for asciidoc and xmlto and don't build the docs if these are not installed.
-    AC_CHECK_PROG(gs_have_asciidoc, asciidoc, yes, no)
-    AC_CHECK_PROG(gs_have_xmlto, xmlto, yes, no)
-    if test "x$gs_have_asciidoc" = "xno" -o "x$gs_have_xmlto" = "xno"; then
+    AC_CHECK_PROG(zprotut_have_asciidoc, asciidoc, yes, no)
+    AC_CHECK_PROG(zprotut_have_xmlto, xmlto, yes, no)
+    if test "x$zprotut_have_asciidoc" = "xno" -o "x$zprotut_have_xmlto" = "xno"; then
         if test "x$with_docs" = "xyes" ; then
             AC_MSG_ERROR([Build with docs was explicitly requested, but tools are not available])
         fi
-        gs_build_doc="no"
+        zprotut_build_doc="no"
         # Tarballs built with 'make dist' ship with prebuilt documentation.
-        if ! test -f doc/gs.7; then
-            gs_install_man="no"
-            AC_MSG_WARN([You are building an unreleased version of GS and asciidoc or xmlto are not installed.])
+        if ! test -f doc/zprotut.7; then
+            zprotut_install_man="no"
+            AC_MSG_WARN([You are building an unreleased version of ZPROTUT and asciidoc or xmlto are not installed.])
             AC_MSG_WARN([Documentation will not be built and manual pages will not be installed.])
         fi
     fi
 fi
 AC_MSG_CHECKING([whether to build documentation])
-AC_MSG_RESULT([$gs_build_doc])
+AC_MSG_RESULT([$zprotut_build_doc])
 AC_MSG_CHECKING([whether to install manpages])
-AC_MSG_RESULT([$gs_install_man])
+AC_MSG_RESULT([$zprotut_install_man])
 
-# Set some default features required by libgs code.
-CPPFLAGS="-DGS_INTERNAL_BUILD -D_REENTRANT -D_THREAD_SAFE $CPPFLAGS"
+# Set some default features required by libzprotut code.
+CPPFLAGS="-DZPROTUT_INTERNAL_BUILD -D_REENTRANT -D_THREAD_SAFE $CPPFLAGS"
 
 # OS-specific tests
 case "${host_os}" in
     *linux*)
         # Define on Linux to enable all library features
         CPPFLAGS="-D_GNU_SOURCE -DLINUX $CPPFLAGS"
-        AC_DEFINE(GS_HAVE_LINUX, 1, [Have Linux OS])
-        gs_on_linux="yes"
+        AC_DEFINE(ZPROTUT_HAVE_LINUX, 1, [Have Linux OS])
+        zprotut_on_linux="yes"
 
         case "${host_os}" in
             *android*)
-                AC_DEFINE(GS_HAVE_ANDROID, 1, [Have Android OS])
-                gs_on_android="yes"
+                AC_DEFINE(ZPROTUT_HAVE_ANDROID, 1, [Have Android OS])
+                zprotut_on_android="yes"
             ;;
         esac
         ;;
@@ -234,74 +234,74 @@ case "${host_os}" in
         CPPFLAGS="-D_PTHREADS $CPPFLAGS"
         # Allow definitions of common OS-provided functions that are not in old standards
         CPPFLAGS="-D__EXTENSIONS__ $CPPFLAGS"
-        AC_DEFINE(GS_HAVE_SOLARIS, 1, [Have Solaris OS])
+        AC_DEFINE(ZPROTUT_HAVE_SOLARIS, 1, [Have Solaris OS])
         CFLAGS="${CFLAGS} -lsocket -lssp"
         ;;
     *freebsd*)
         # Define on FreeBSD to enable all library features
         CPPFLAGS="-D__BSD_VISIBLE $CPPFLAGS"
-        AC_DEFINE(GS_HAVE_FREEBSD, 1, [Have FreeBSD OS])
+        AC_DEFINE(ZPROTUT_HAVE_FREEBSD, 1, [Have FreeBSD OS])
         ;;
     *darwin*)
         # Define on Darwin to enable all library features
         CPPFLAGS="-D_DARWIN_C_SOURCE $CPPFLAGS"
-        AC_DEFINE(GS_HAVE_OSX, 1, [Have DarwinOSX OS])
+        AC_DEFINE(ZPROTUT_HAVE_OSX, 1, [Have DarwinOSX OS])
         ;;
     *netbsd*)
         # Define on NetBSD to enable all library features
         CPPFLAGS="-D_NETBSD_SOURCE $CPPFLAGS"
-        AC_DEFINE(GS_HAVE_NETBSD, 1, [Have NetBSD OS])
+        AC_DEFINE(ZPROTUT_HAVE_NETBSD, 1, [Have NetBSD OS])
         ;;
     *openbsd*)
         # Define on OpenBSD to enable all library features
         CPPFLAGS="-D_BSD_SOURCE $CPPFLAGS"
-        AC_DEFINE(GS_HAVE_OPENBSD, 1, [Have OpenBSD OS])
+        AC_DEFINE(ZPROTUT_HAVE_OPENBSD, 1, [Have OpenBSD OS])
         ;;
     *nto-qnx*)
-        AC_DEFINE(GS_HAVE_QNXNTO, 1, [Have QNX Neutrino OS])
+        AC_DEFINE(ZPROTUT_HAVE_QNXNTO, 1, [Have QNX Neutrino OS])
         ;;
     *aix*)
-        AC_DEFINE(GS_HAVE_AIX, 1, [Have AIX OS])
+        AC_DEFINE(ZPROTUT_HAVE_AIX, 1, [Have AIX OS])
         ;;
     *hpux*)
         # Define on HP-UX to enable all library features
         CPPFLAGS="-D_POSIX_C_SOURCE=200112L"
-        AC_DEFINE(GS_HAVE_HPUX, 1, [Have HPUX OS])
+        AC_DEFINE(ZPROTUT_HAVE_HPUX, 1, [Have HPUX OS])
         ;;
     *mingw32*)
         # Disable format error due to incomplete ANSI C
         CFLAGS="-Wno-error=format -Wno-unused-function -Wno-unused-variable -D_XOPEN_SOURCE $CFLAGS"
         CPPFLAGS="-Wno-error=format -Wno-unused-function -Wno-unused-variable -D_XOPEN_SOURCE $CPPFLAGS"
-        AC_DEFINE(GS_HAVE_WINDOWS, 1, [Have Windows OS])
-        AC_DEFINE(GS_HAVE_MINGW32, 1, [Have MinGW32])
+        AC_DEFINE(ZPROTUT_HAVE_WINDOWS, 1, [Have Windows OS])
+        AC_DEFINE(ZPROTUT_HAVE_MINGW32, 1, [Have MinGW32])
         AC_CHECK_HEADERS(windows.h)
-        gs_on_mingw32="yes"
-        gs_install_man="no"
+        zprotut_on_mingw32="yes"
+        zprotut_install_man="no"
         ;;
     *mingw64*)
         # Define on MINGW64 to enable all libeary features
         # Disable format error due to incomplete ANSI C
         CFLAGS="-Wno-error=format -Wno-unused-function -Wno-unused-variable -D_XOPEN_SOURCE $CFLAGS"
         CPPFLAGS="-Wno-error=format -Wno-unused-function -Wno-unused-variable -D_XOPEN_SOURCE $CPPFLAGS"
-        AC_DEFINE(GS_HAVE_WINDOWS, 1, [Have Windows OS])
-        AC_DEFINE(GS_HAVE_MINGW32, 1, [Have MinGW32])
+        AC_DEFINE(ZPROTUT_HAVE_WINDOWS, 1, [Have Windows OS])
+        AC_DEFINE(ZPROTUT_HAVE_MINGW32, 1, [Have MinGW32])
         AC_CHECK_HEADERS(windows.h)
-        gs_on_mingw32="yes"
-        gs_install_man="no"
+        zprotut_on_mingw32="yes"
+        zprotut_install_man="no"
         ;;
     *cygwin*)
         # Define on Cygwin to enable all library features
         CPPFLAGS="-D_GNU_SOURCE $CPPFLAGS"
-        AC_DEFINE(GS_HAVE_CYGWIN, 1, [Have Cygwin])
-        gs_on_cygwin="yes"
+        AC_DEFINE(ZPROTUT_HAVE_CYGWIN, 1, [Have Cygwin])
+        zprotut_on_cygwin="yes"
         ;;
     gnu*)
         # Define on GNU/Hurd to enable all library features
         if test "x$GXX" = "xyes"; then
             CPPFLAGS="-D_GNU_SOURCE $CPPFLAGS"
         fi
-        AC_DEFINE(GS_HAVE_GNU, 1, [Have GNU/Hurd OS])
-        gs_on_gnu="yes"
+        AC_DEFINE(ZPROTUT_HAVE_GNU, 1, [Have GNU/Hurd OS])
+        zprotut_on_gnu="yes"
         ;;
     *)
         AC_MSG_ERROR([unsupported system: ${host_os}])
@@ -333,13 +333,13 @@ AC_C_VOLATILE
 AC_C_BIGENDIAN
 
 AM_CONDITIONAL(ENABLE_SHARED, test "x$enable_shared" = "xyes")
-AM_CONDITIONAL(ON_MINGW, test "x$gs_on_mingw32" = "xyes")
-AM_CONDITIONAL(ON_CYGWIN, test "x$gs_on_cygwin" = "xyes")
-AM_CONDITIONAL(ON_ANDROID, test "x$gs_on_android" = "xyes")
-AM_CONDITIONAL(ON_LINUX, test "x$gs_on_linux" = "xyes")
-AM_CONDITIONAL(ON_GNU, test "x$gs_on_gnu" = "xyes")
-AM_CONDITIONAL(INSTALL_MAN, test "x$gs_install_man" = "xyes")
-AM_CONDITIONAL(BUILD_DOC, test "x$gs_build_doc" = "xyes")
+AM_CONDITIONAL(ON_MINGW, test "x$zprotut_on_mingw32" = "xyes")
+AM_CONDITIONAL(ON_CYGWIN, test "x$zprotut_on_cygwin" = "xyes")
+AM_CONDITIONAL(ON_ANDROID, test "x$zprotut_on_android" = "xyes")
+AM_CONDITIONAL(ON_LINUX, test "x$zprotut_on_linux" = "xyes")
+AM_CONDITIONAL(ON_GNU, test "x$zprotut_on_gnu" = "xyes")
+AM_CONDITIONAL(INSTALL_MAN, test "x$zprotut_install_man" = "xyes")
+AM_CONDITIONAL(BUILD_DOC, test "x$zprotut_build_doc" = "xyes")
 
 AC_ARG_ENABLE([dist_cmakefiles],
     AS_HELP_STRING([--enable-dist_cmakefiles],
@@ -364,15 +364,15 @@ AC_ARG_ENABLE([starter],
 AM_CONDITIONAL([ENABLE_STARTER], [test x$enable_starter != xno])
 AM_COND_IF([ENABLE_STARTER], [AC_MSG_NOTICE([ENABLE_STARTER defined])])
 
-# Check for gs_selftest intent
-AC_ARG_ENABLE([gs_selftest],
-    AS_HELP_STRING([--enable-gs_selftest],
-        [Compile 'gs_selftest' in src [default=yes]]),
-    [enable_gs_selftest=$enableval],
-    [enable_gs_selftest=yes])
+# Check for zprotut_selftest intent
+AC_ARG_ENABLE([zprotut_selftest],
+    AS_HELP_STRING([--enable-zprotut_selftest],
+        [Compile 'zprotut_selftest' in src [default=yes]]),
+    [enable_zprotut_selftest=$enableval],
+    [enable_zprotut_selftest=yes])
 
-AM_CONDITIONAL([ENABLE_GS_SELFTEST], [test x$enable_gs_selftest != xno])
-AM_COND_IF([ENABLE_GS_SELFTEST], [AC_MSG_NOTICE([ENABLE_GS_SELFTEST defined])])
+AM_CONDITIONAL([ENABLE_ZPROTUT_SELFTEST], [test x$enable_zprotut_selftest != xno])
+AM_COND_IF([ENABLE_ZPROTUT_SELFTEST], [AC_MSG_NOTICE([ENABLE_ZPROTUT_SELFTEST defined])])
 
 # Checks for library functions.
 AC_TYPE_SIGNAL
@@ -386,8 +386,8 @@ AM_CONDITIONAL([ENABLE_DRAFTS], [test x$enable_drafts != xno])
 
 if test "x$enable_drafts" = "xyes"; then
     AC_MSG_NOTICE([Building stable and legacy API + draft API])
-    AC_DEFINE(GS_BUILD_DRAFT_API, 1, [Provide draft classes and methods])
-    AC_SUBST(pkg_config_defines, "-DGS_BUILD_DRAFT_API=1")
+    AC_DEFINE(ZPROTUT_BUILD_DRAFT_API, 1, [Provide draft classes and methods])
+    AC_SUBST(pkg_config_defines, "-DZPROTUT_BUILD_DRAFT_API=1")
 else
     AC_MSG_NOTICE([Building stable and legacy API (no draft API)])
     AC_SUBST(pkg_config_defines, "")
@@ -436,7 +436,7 @@ AS_IF([test "x$enable_Werror" = "xyes" || test "x$enable_Werror" = "xauto"],
 AC_CONFIG_FILES([Makefile
                  doc/Makefile
                  include/Makefile
-                 src/libgs.pc
+                 src/libzprotut.pc
                 ])
 
 
@@ -477,13 +477,13 @@ echo C++ compiler.................. : $CXX
 echo C++ compiler flags............ : $CXXFLAGS
 echo Configure date................ : $BUILD_DATE
 echo Build architecture............ : $BUILD_ARCH
-echo Build docs.................... : $gs_build_doc
+echo Build docs.................... : $zprotut_build_doc
 echo Build host.................... : $BUILD_HOST
 echo Build user.................... : $USER
 echo Draft API..................... : $enable_drafts
 echo Python Bindings............... : $ZPROJECT_BINDINGS_PYTHON
 echo Install dir................... : $prefix
-echo Install man pages............. : $gs_install_man
+echo Install man pages............. : $zprotut_install_man
 
 echo
 echo Help:

@@ -35,8 +35,8 @@ CMAKE_AR:FILEPATH=/usr/bin/ar
 //No help, variable specified on the command line.
 CMAKE_BUILD_TYPE:STRING=Debug
 
-//CXX compiler
-CMAKE_CXX_COMPILER:STRING=/usr/bin/g++
+//No help, variable specified on the command line.
+CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -61,8 +61,8 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 //Flags used by the CXX compiler during RELWITHDEBINFO builds.
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
-//C compiler
-CMAKE_C_COMPILER:STRING=/usr/bin/gcc
+//No help, variable specified on the command line.
+CMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -153,7 +153,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=gs
+CMAKE_PROJECT_NAME:STATIC=zprotut
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -284,14 +284,26 @@ SVNCOMMAND:FILEPATH=/usr/bin/svn
 //Timout of the total testsuite
 TOTAL_TIMEOUT:STRING=600
 
+//Whether or not to build the shared object
+ZPROTUT_BUILD_SHARED:BOOL=ON
+
+//Whether or not to build the static archive
+ZPROTUT_BUILD_STATIC:BOOL=ON
+
 //Path to a file.
 czmq_INCLUDE_DIRS:PATH=/usr/local/include
 
 //Path to a library.
 czmq_LIBRARIES:FILEPATH=/usr/local/lib/libczmq.so
 
+//Dependencies for the target
+gs-static_LIB_DEPENDS:STATIC=general;/usr/lib/libzmq.so;general;/usr/local/lib/libczmq.so;
+
 //Value Computed by CMake
 gs_BINARY_DIR:STATIC=/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/build
+
+//Dependencies for the target
+gs_LIB_DEPENDS:STATIC=general;/usr/lib/libzmq.so;general;/usr/local/lib/libczmq.so;
 
 //Value Computed by CMake
 gs_SOURCE_DIR:STATIC=/home/ttrocha/_dev/projects/zeromq/getting_started/zproject
@@ -304,6 +316,12 @@ libzmq_LIBRARIES:FILEPATH=/usr/lib/libzmq.so
 
 //Path to a library.
 pkgcfg_lib_PC_LIBZMQ_zmq:FILEPATH=/usr/lib/libzmq.so
+
+//Value Computed by CMake
+zprotut_BINARY_DIR:STATIC=/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/build
+
+//Value Computed by CMake
+zprotut_SOURCE_DIR:STATIC=/home/ttrocha/_dev/projects/zeromq/getting_started/zproject
 
 
 ########################

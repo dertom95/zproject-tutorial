@@ -46,6 +46,7 @@ add_library(gs SHARED IMPORTED)
 
 set_target_properties(gs PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/include"
+  INTERFACE_LINK_LIBRARIES "/usr/lib/libzmq.so;/usr/local/lib/libczmq.so"
 )
 
 # Create imported target gs-static
@@ -54,6 +55,7 @@ add_library(gs-static STATIC IMPORTED)
 set_target_properties(gs-static PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "GS_STATIC"
   INTERFACE_INCLUDE_DIRECTORIES "/home/ttrocha/_dev/projects/zeromq/getting_started/zproject/include"
+  INTERFACE_LINK_LIBRARIES "/usr/lib/libzmq.so;/usr/local/lib/libczmq.so"
 )
 
 # Import target "gs" for configuration "Debug"

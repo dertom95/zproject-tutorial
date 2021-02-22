@@ -7,7 +7,7 @@
 # Project setup
 ########################################################################
 cmake_minimum_required(VERSION 2.8.12)
-project(gs)
+project(zprotut)
 enable_language(C)
 enable_testing()
 
@@ -31,7 +31,7 @@ set(pkg_config_names_private "")
 ########################################################################
 OPTION (ENABLE_DRAFTS "Build and install draft classes and methods" ON)
 IF (ENABLE_DRAFTS)
-    ADD_DEFINITIONS (-DGS_BUILD_DRAFT_API)
+    ADD_DEFINITIONS (-DZPROTUT_BUILD_DRAFT_API)
 ENDIF (ENABLE_DRAFTS)
 
 ########################################################################
@@ -101,29 +101,29 @@ set(OPTIONAL_LIBRARIES_STATIC)
 ########################################################################
 # version
 ########################################################################
-set(GS_VERSION_MAJOR 1)
-set(GS_VERSION_MINOR 1)
-set(GS_VERSION_PATCH 0)
-set(GS_VERSION "${GS_VERSION_MAJOR}.${GS_VERSION_MINOR}.${GS_VERSION_PATCH}")
-message(STATUS "Detected GS Version - ${GS_VERSION}")
+set(ZPROTUT_VERSION_MAJOR 1)
+set(ZPROTUT_VERSION_MINOR 1)
+set(ZPROTUT_VERSION_PATCH 0)
+set(ZPROTUT_VERSION "${ZPROTUT_VERSION_MAJOR}.${ZPROTUT_VERSION_MINOR}.${ZPROTUT_VERSION_PATCH}")
+message(STATUS "Detected ZPROTUT Version - ${ZPROTUT_VERSION}")
 
 
 ########################################################################
 # includes
 ########################################################################
-set (gs_headers
-    include/gs_library.h
-    include/gs.h
+set (zprotut_headers
+    include/zprotut_library.h
+    include/zprotut.h
 )
 
 IF (ENABLE_DRAFTS)
-    list(APPEND gs_headers
+    list(APPEND zprotut_headers
         include/shouter.h
     )
 ENDIF (ENABLE_DRAFTS)
 
-source_group ("Header Files" FILES ${gs_headers})
-install(FILES ${gs_headers} DESTINATION include)
+source_group ("Header Files" FILES ${zprotut_headers})
+install(FILES ${zprotut_headers} DESTINATION include)
 
 ########################################################################
 # library
@@ -131,72 +131,72 @@ install(FILES ${gs_headers} DESTINATION include)
 
 
 include_directories("${SOURCE_DIR}/src" "${SOURCE_DIR}/include" "${PROJECT_BINARY_DIR}")
-set (gs_sources
+set (zprotut_sources
 )
 
 IF (ENABLE_DRAFTS)
-    list (APPEND gs_sources
+    list (APPEND zprotut_sources
         src/shouter.c
     )
 ENDIF (ENABLE_DRAFTS)
 
 IF (ENABLE_DRAFTS)
-    list (APPEND gs_sources
-        src/gs_private_selftest.c
+    list (APPEND zprotut_sources
+        src/zprotut_private_selftest.c
     )
 ENDIF (ENABLE_DRAFTS)
 
-source_group("Source Files" FILES ${gs_sources})
+source_group("Source Files" FILES ${zprotut_sources})
 
 
-option(GS_BUILD_SHARED "Whether or not to build the shared object" ON)
-option(GS_BUILD_STATIC "Whether or not to build the static archive" ON)
+option(ZPROTUT_BUILD_SHARED "Whether or not to build the shared object" ON)
+option(ZPROTUT_BUILD_STATIC "Whether or not to build the static archive" ON)
 
-if (NOT GS_BUILD_SHARED AND NOT GS_BUILD_STATIC)
+if (NOT ZPROTUT_BUILD_SHARED AND NOT ZPROTUT_BUILD_STATIC)
   message(FATAL_ERROR "Neither static nor shared library build enabled")
 endif()
 
 IF (NOT MSVC)
   # avoid building everything twice for shared + static
   # only on *nix, as Windows needs different preprocessor defines in static builds
-  add_library (gs_objects OBJECT ${gs_sources})
-  set_property(TARGET gs_objects PROPERTY POSITION_INDEPENDENT_CODE ON)
+  add_library (zprotut_objects OBJECT ${zprotut_sources})
+  set_property(TARGET zprotut_objects PROPERTY POSITION_INDEPENDENT_CODE ON)
 ENDIF (NOT MSVC)
 
 # shared
-if (GS_BUILD_SHARED)
+if (ZPROTUT_BUILD_SHARED)
   IF (APPLE)
-    add_library(gs SHARED ${gs_sources})
+    add_library(zprotut SHARED ${zprotut_sources})
   ELSE (APPLE)
     IF (MSVC)
-      add_library(gs SHARED ${gs_sources})
+      add_library(zprotut SHARED ${zprotut_sources})
     ELSE (MSVC)
-      add_library(gs SHARED $<TARGET_OBJECTS:gs_objects>)
+      add_library(zprotut SHARED $<TARGET_OBJECTS:zprotut_objects>)
     ENDIF (MSVC)
   ENDIF(APPLE)
 
-  set_target_properties (gs PROPERTIES
+  set_target_properties (zprotut PROPERTIES
     PUBLIC_HEADER "${public_headers}"
-    DEFINE_SYMBOL "GS_EXPORTS"
+    DEFINE_SYMBOL "ZPROTUT_EXPORTS"
     SOVERSION "0"
-    VERSION "${GS_VERSION}"
+    VERSION "${ZPROTUT_VERSION}"
     COMPILE_DEFINITIONS "DLL_EXPORT"
-    OUTPUT_NAME "gs"
+    OUTPUT_NAME "zprotut"
     PREFIX "lib"
   )
 
-  target_link_libraries(gs
+  target_link_libraries(zprotut
     PUBLIC ${MORE_LIBRARIES}
   )
 
-  install(TARGETS gs
-    EXPORT gs-targets
+  install(TARGETS zprotut
+    EXPORT zprotut-targets
     LIBRARY DESTINATION "lib${LIB_SUFFIX}" # .so file
     ARCHIVE DESTINATION "lib${LIB_SUFFIX}" # .lib file
     RUNTIME DESTINATION bin                # .dll file
   )
 
-  target_include_directories(gs
+  target_include_directories(zprotut
     PUBLIC
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
       $<INSTALL_INTERFACE:include>
@@ -204,42 +204,42 @@ if (GS_BUILD_SHARED)
 endif()
 
 # static
-if (GS_BUILD_STATIC)
+if (ZPROTUT_BUILD_STATIC)
   IF (APPLE)
-    add_library(gs-static STATIC ${gs_sources})
+    add_library(zprotut-static STATIC ${zprotut_sources})
   ELSE (APPLE)
     IF (MSVC)
-      add_library(gs-static STATIC ${gs_sources})
+      add_library(zprotut-static STATIC ${zprotut_sources})
     ELSE (MSVC)
-      add_library(gs-static STATIC $<TARGET_OBJECTS:gs_objects>)
+      add_library(zprotut-static STATIC $<TARGET_OBJECTS:zprotut_objects>)
     ENDIF (MSVC)
   ENDIF (APPLE)
 
-  set_target_properties(gs-static PROPERTIES
+  set_target_properties(zprotut-static PROPERTIES
     PUBLIC_HEADER "${public_headers}"
-    COMPILE_DEFINITIONS "GS_STATIC"
-    OUTPUT_NAME "gs"
+    COMPILE_DEFINITIONS "ZPROTUT_STATIC"
+    OUTPUT_NAME "zprotut"
     PREFIX "lib"
   )
 
-  target_link_libraries(gs-static
+  target_link_libraries(zprotut-static
     PUBLIC ${MORE_LIBRARIES}
   )
 
-  install(TARGETS gs-static
-    EXPORT gs-targets
+  install(TARGETS zprotut-static
+    EXPORT zprotut-targets
     LIBRARY DESTINATION "lib${LIB_SUFFIX}" # .so file
     ARCHIVE DESTINATION "lib${LIB_SUFFIX}" # .lib file
     RUNTIME DESTINATION bin                # .dll file
   )
 
-  target_include_directories(gs-static
+  target_include_directories(zprotut-static
     PUBLIC
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
       $<INSTALL_INTERFACE:include>
   )
-  target_compile_definitions(gs-static
-    PUBLIC GS_STATIC
+  target_compile_definitions(zprotut-static
+    PUBLIC ZPROTUT_STATIC
   )
 
 endif()
@@ -255,17 +255,17 @@ set (exec_prefix "\${prefix}")
 set (libdir "\${prefix}/lib${LIB_SUFFIX}")
 set (includedir "\${prefix}/include")
 IF (ENABLE_DRAFTS)
-    set (pkg_config_defines "-DGS_BUILD_DRAFT_API=1")
+    set (pkg_config_defines "-DZPROTUT_BUILD_DRAFT_API=1")
 ELSE (ENABLE_DRAFTS)
     set (pkg_config_defines "")
 ENDIF (ENABLE_DRAFTS)
 configure_file(
-    "${SOURCE_DIR}/src/libgs.pc.in"
-    "${SOURCE_DIR}/src/libgs.pc"
+    "${SOURCE_DIR}/src/libzprotut.pc.in"
+    "${SOURCE_DIR}/src/libzprotut.pc"
 @ONLY)
 
 install(
-    FILES "${SOURCE_DIR}/src/libgs.pc"
+    FILES "${SOURCE_DIR}/src/libzprotut.pc"
     DESTINATION "lib${LIB_SUFFIX}/pkgconfig"
 )
 
@@ -274,27 +274,27 @@ install(
 ########################################################################
 include(CMakePackageConfigHelpers)
 if (WIN32)
-  set(CMAKECONFIG_INSTALL_DIR "CMake" CACHE STRING "install path for gsConfig.cmake")
+  set(CMAKECONFIG_INSTALL_DIR "CMake" CACHE STRING "install path for zprotutConfig.cmake")
 else()
   # GNUInstallDirs "DATADIR" wrong here; CMake search path wants "share".
-  set(CMAKECONFIG_INSTALL_DIR "share/cmake/gs" CACHE STRING "install path for gsConfig.cmake")
+  set(CMAKECONFIG_INSTALL_DIR "share/cmake/zprotut" CACHE STRING "install path for zprotutConfig.cmake")
 endif()
 
 if (NOT CMAKE_VERSION VERSION_LESS 3.0)
-  export(EXPORT gs-targets
-         FILE "${CMAKE_CURRENT_BINARY_DIR}/gsTargets.cmake")
+  export(EXPORT zprotut-targets
+         FILE "${CMAKE_CURRENT_BINARY_DIR}/zprotutTargets.cmake")
 endif()
 configure_package_config_file(builds/cmake/Config.cmake.in
-                              "${CMAKE_CURRENT_BINARY_DIR}/gsConfig.cmake"
+                              "${CMAKE_CURRENT_BINARY_DIR}/zprotutConfig.cmake"
                               INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR})
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/gsConfigVersion.cmake
-                                 VERSION ${GS_VERSION}
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/zprotutConfigVersion.cmake
+                                 VERSION ${ZPROTUT_VERSION}
                                  COMPATIBILITY AnyNewerVersion)
-install(EXPORT gs-targets
-        FILE gsTargets.cmake
+install(EXPORT zprotut-targets
+        FILE zprotutTargets.cmake
         DESTINATION ${CMAKECONFIG_INSTALL_DIR})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gsConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/gsConfigVersion.cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zprotutConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/zprotutConfigVersion.cmake
               DESTINATION ${CMAKECONFIG_INSTALL_DIR})
 
 ########################################################################
@@ -304,17 +304,17 @@ add_executable(
     starter
     "${SOURCE_DIR}/src/starter.c"
 )
-if (TARGET gs)
+if (TARGET zprotut)
 target_link_libraries(
     starter
-    gs
+    zprotut
     ${OPTIONAL_LIBRARIES}
 )
 endif()
-if (NOT TARGET gs AND TARGET gs-static)
+if (NOT TARGET zprotut AND TARGET zprotut-static)
 target_link_libraries(
     starter
-    gs-static
+    zprotut-static
     ${OPTIONAL_LIBRARIES}
     ${OPTIONAL_LIBRARIES_STATIC}
 )
@@ -323,20 +323,20 @@ install(TARGETS starter
     RUNTIME DESTINATION bin
 )
 add_executable(
-    gs_selftest
-    "${SOURCE_DIR}/src/gs_selftest.c"
+    zprotut_selftest
+    "${SOURCE_DIR}/src/zprotut_selftest.c"
 )
-if (TARGET gs)
+if (TARGET zprotut)
 target_link_libraries(
-    gs_selftest
-    gs
+    zprotut_selftest
+    zprotut
     ${OPTIONAL_LIBRARIES}
 )
 endif()
-if (NOT TARGET gs AND TARGET gs-static)
+if (NOT TARGET zprotut AND TARGET zprotut-static)
 target_link_libraries(
-    gs_selftest
-    gs-static
+    zprotut_selftest
+    zprotut-static
     ${OPTIONAL_LIBRARIES}
     ${OPTIONAL_LIBRARIES_STATIC}
 )
@@ -388,7 +388,7 @@ set_directory_properties(
 foreach(TEST_CLASS ${TEST_CLASSES})
     add_test(
         NAME ${TEST_CLASS}
-        COMMAND gs_selftest --continue --verbose --test ${TEST_CLASS}
+        COMMAND zprotut_selftest --continue --verbose --test ${TEST_CLASS}
     )
     IF (WIN32 AND CMAKE_PREFIX_PATH)
         file(TO_NATIVE_PATH "${CMAKE_PREFIX_PATH}" CMAKE_PREFIX_PATH_WIN)
@@ -425,11 +425,11 @@ set(cmake_generated ${PROJECT_BINARY_DIR}/CMakeCache.txt
                     ${PROJECT_BINARY_DIR}/Testing
                     ${PROJECT_BINARY_DIR}/compile_commands.json
                     ${PROJECT_BINARY_DIR}/platform.h
-                    ${PROJECT_BINARY_DIR}/src/libgs.pc
-                    ${PROJECT_BINARY_DIR}/src/libgs.so
-                    ${PROJECT_BINARY_DIR}/src/gs_selftest
+                    ${PROJECT_BINARY_DIR}/src/libzprotut.pc
+                    ${PROJECT_BINARY_DIR}/src/libzprotut.so
+                    ${PROJECT_BINARY_DIR}/src/zprotut_selftest
                     ${PROJECT_BINARY_DIR}/src/starter
-                    ${PROJECT_BINARY_DIR}/src/gs_selftest
+                    ${PROJECT_BINARY_DIR}/src/zprotut_selftest
 )
 
 add_custom_command(
@@ -454,8 +454,8 @@ message (STATUS "  C compiler        :   ${CMAKE_C_COMPILER}")
 message (STATUS "  Debug C flags     :   ${CMAKE_C_FLAGS_DEBUG} ${CMAKE_C_FLAGS}")
 message (STATUS "  Release C flags   :   ${CMAKE_C_FLAGS_RELEASE} ${CMAKE_C_FLAGS}")
 message (STATUS "  Build type        :   ${CMAKE_BUILD_TYPE}")
-message (STATUS "  Static build      :   ${GS_BUILD_STATIC}")
-message (STATUS "  Shared build      :   ${GS_BUILD_SHARED}")
+message (STATUS "  Static build      :   ${ZPROTUT_BUILD_STATIC}")
+message (STATUS "  Shared build      :   ${ZPROTUT_BUILD_SHARED}")
 IF (ENABLE_DRAFTS)
 message (STATUS "  Draft API         :   Yes")
 ELSE (ENABLE_DRAFTS)

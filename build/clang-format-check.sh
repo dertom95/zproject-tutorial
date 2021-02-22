@@ -4,7 +4,7 @@
 
 FAILED=0
 IFS=";"
-FILES="../include/gs.h;../include/gs_library.h;../include/shouter.h;../src/gs_classes.h;../src/gs_private_selftest.c;../src/gs_selftest.c;../src/shouter.c;../src/starter.c"
+FILES="../include/shouter.h;../include/zprotut.h;../include/zprotut_library.h;../src/shouter.c;../src/starter.c;../src/zprotut_classes.h;../src/zprotut_private_selftest.c;../src/zprotut_selftest.c"
 IDS=$(echo -en "\n\b")
 [ -n "$MAKE" ] || MAKE=make
 for FILE in $FILES

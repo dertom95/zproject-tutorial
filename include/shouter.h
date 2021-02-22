@@ -16,36 +16,36 @@ extern "C" {
 //  @warning Please edit the model at "api/shouter.api" to make changes.
 //  @interface
 //  This API is a draft, and may change without notice.
-#ifdef GS_BUILD_DRAFT_API
+#ifdef ZPROTUT_BUILD_DRAFT_API
 #define SHOUTER_DEFAULT_SHOUT "HOORAY!"      // The default shout
 #define SHOUTER_SOME_INT 1895                // This is an int constant
 
 //  *** Draft method, for development use, may change without warning ***
 //  Create a new shouter
-GS_EXPORT shouter_t *
+ZPROTUT_EXPORT shouter_t *
     shouter_new (const char *name);
 
 //  *** Draft method, for development use, may change without warning ***
 //  Destroy the shouter.
-GS_EXPORT void
+ZPROTUT_EXPORT void
     shouter_destroy (shouter_t **self_p);
 
 //  *** Draft method, for development use, may change without warning ***
 //  Shout once!
-GS_EXPORT int
+ZPROTUT_EXPORT int
     shouter_shout (shouter_t *self, const char *shout_text);
 
 //  *** Draft method, for development use, may change without warning ***
 //  Shout multiple times!
-GS_EXPORT int
+ZPROTUT_EXPORT int
     shouter_shout_multi (shouter_t *self, const char *shout_text, int times);
 
 //  *** Draft method, for development use, may change without warning ***
 //  Self test of this class.
-GS_EXPORT void
+ZPROTUT_EXPORT void
     shouter_test (bool verbose);
 
-#endif // GS_BUILD_DRAFT_API
+#endif // ZPROTUT_BUILD_DRAFT_API
 //  @end
 
 #ifdef __cplusplus

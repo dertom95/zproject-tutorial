@@ -37,7 +37,8 @@ EXTRA_DIST += \
 endif
 
 EXTRA_DIST += \
-    src/gs_classes.h
+    bindings \
+    src/zprotut_classes.h
 
 # NOTE: this "include" syntax is not a "make" but an "autotools" keyword,
 # see https://www.gnu.org/software/automake/manual/html_node/Include.html

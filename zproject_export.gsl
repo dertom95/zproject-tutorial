@@ -1,0 +1,75 @@
+#   Generate docker packaging for project
+#
+#   This is a code generator built using the iMatix GSL code generation
+#   language. See https://github.com/zeromq/gsl for details.
+#
+#   Copyright (c) the Contributors as noted in the AUTHORS file.
+#   This file is part of zproject.
+#
+#   This Source Code Form is subject to the terms of the Mozilla Public
+#   License, v. 2.0. If a copy of the MPL was not distributed with this
+#   file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+register_target ("export", "packaging libs and includes")
+
+.macro generate_export_file ()
+.directory.create('builds/export')
+.output "builds/export/build_export.sh"
+
+mkdir target
+mkdir tmp
+
+ROOT_DIR=$PWD/tmp
+PREFIX_DIR=$PWD/target
+
+CFLAGS="-I${PREFIX_DIR}/include"
+CPPFLAGS="-I${PREFIX_DIR}/include"
+CXXFLAGS="-I${PREFIX_DIR}/include"
+LDFLAGS="-L${PREFIX_DIR}/lib"
+
+echo "Root:$ROOT_DIR Prefix:$PREFIX_dir"
+
+apt-get install -y -q --force-yes build-essential git-core libtool autotools-dev autoconf automake pkg-config unzip libkrb5-dev cmake
+
+.for use where !optional & defined (use.tarball)  & use.draft ?<> 1
+cd $ROOT_DIR
+wget $(use.tarball)
+tar -xzf \$(basename "$(use.tarball)")
+rm \$(basename "$(use.tarball)")
+cd \$(basename "$(use.tarball)" .tar.gz)
+ ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
+make
+make install
+sudo ldconfig
+
+.endfor
+
+.for use where (!optional & !defined (use.tarball))  | (!optional & use.draft = 1)
+cd $ROOT_DIR
+git clone --quiet $(use.repository) $(use.project)
+cd $(use.project)
+ ./autogen.sh 2> /dev/null
+# ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
+ ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
+ echo ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
+make
+make install
+sudo ldconfig
+
+.endfor
+
+cd $ROOT_DIR
+git clone --quiet $(project.repository) $(project.name:c)
+cd $(project.name:c)
+ ./autogen.sh 2> /dev/null
+ echo ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
+ ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
+make
+make install
+sudo ldconfig
+
+.endmacro
+
+function target_export
+    generate_export_file ()
+endfunction

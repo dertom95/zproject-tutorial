@@ -3,8 +3,8 @@
 #  Read the zproject/README.md for information about making permanent changes. #
 ################################################################################
 include_HEADERS = \
-    gs.h \
-    gs_library.h
+    zprotut.h \
+    zprotut_library.h
 
 if ENABLE_DRAFTS
 include_HEADERS += \

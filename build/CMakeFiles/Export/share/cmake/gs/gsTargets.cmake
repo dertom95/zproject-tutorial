@@ -55,6 +55,7 @@ add_library(gs SHARED IMPORTED)
 
 set_target_properties(gs PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "/usr/lib/libzmq.so;/usr/local/lib/libczmq.so"
 )
 
 # Create imported target gs-static
@@ -63,7 +64,12 @@ add_library(gs-static STATIC IMPORTED)
 set_target_properties(gs-static PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "GS_STATIC"
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "/usr/lib/libzmq.so;/usr/local/lib/libczmq.so"
 )
+
+if(CMAKE_VERSION VERSION_LESS 2.8.12)
+  message(FATAL_ERROR "This file relies on consumers using CMake 2.8.12 or greater.")
+endif()
 
 # Load information for each installed configuration.
 get_filename_component(_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
