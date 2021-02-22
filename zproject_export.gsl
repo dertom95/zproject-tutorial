@@ -15,7 +15,9 @@ register_target ("export", "packaging libs and includes")
 .macro generate_export_file ()
 .directory.create('builds/export')
 .output "builds/export/build_export.sh"
+.chmod_x("builds/export/build_export.sh")
 
+rm -Rf tmp
 mkdir target
 mkdir tmp
 
@@ -37,7 +39,7 @@ wget $(use.tarball)
 tar -xzf \$(basename "$(use.tarball)")
 rm \$(basename "$(use.tarball)")
 cd \$(basename "$(use.tarball)" .tar.gz)
- ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
+ ./configure --quiet --without-docs --prefix=$PREFIX_DIR 
 make
 make install
 sudo ldconfig
@@ -49,9 +51,9 @@ cd $ROOT_DIR
 git clone --quiet $(use.repository) $(use.project)
 cd $(use.project)
  ./autogen.sh 2> /dev/null
-# ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
- ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
- echo ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
+# ./configure --quiet --without-docs --prefix=$PREFIX_DIR 
+ ./configure --quiet --without-docs --prefix=$PREFIX_DIR 
+ echo ./configure --quiet --without-docs --prefix=$PREFIX_DIR 
 make
 make install
 sudo ldconfig
@@ -62,8 +64,8 @@ cd $ROOT_DIR
 git clone --quiet $(project.repository) $(project.name:c)
 cd $(project.name:c)
  ./autogen.sh 2> /dev/null
- echo ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
- ./configure --quiet --without-docs --prefix=$PREFIX_DIR -L$PREFIX_DIR/lib -I$PREFIX_DIR/include
+ echo ./configure --quiet --without-docs --prefix=$PREFIX_DIR 
+ ./configure --quiet --without-docs --prefix=$PREFIX_DIR 
 make
 make install
 sudo ldconfig

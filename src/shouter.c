@@ -12,7 +12,7 @@
 @end
 */
 
-#include "gs_classes.h"
+#include "zprotut_classes.h"
 
 //  Structure of our class
 
