@@ -79,6 +79,90 @@ fi
 # or MacOS packages; other OSes are not currently supported by Travis cloud
 [ -z "$CI_TIME" ] || echo "`date`: Starting build of dependencies (if any)..."
 
+# Start of recipe for dependency: libzmq
+fold_start dependency.libzmq "Install dependency libzmq"
+if ! ((command -v dpkg >/dev/null 2>&1 && dpkg -s libzmq3-dev >/dev/null 2>&1) || \
+      (command -v brew >/dev/null 2>&1 && brew ls --versions libzmq >/dev/null 2>&1)); then
+    BASE_PWD=${PWD}
+    cd tmp-deps
+    $CI_TIME git clone --quiet --depth 1 https://github.com/zeromq/libzmq.git libzmq
+    cd libzmq
+    CCACHE_BASEDIR=${PWD}
+    export CCACHE_BASEDIR
+    git --no-pager log --oneline -n1
+    if [ -e autogen.sh ]; then
+        $CI_TIME ./autogen.sh 2> /dev/null
+    fi
+    if [ -e buildconf ]; then
+        $CI_TIME ./buildconf 2> /dev/null
+    fi
+    if [ ! -e autogen.sh ] && [ ! -e buildconf ] && [ ! -e ./configure ] && [ -s ./configure.ac ]; then
+        $CI_TIME libtoolize --copy --force && \
+        $CI_TIME aclocal -I . && \
+        $CI_TIME autoheader && \
+        $CI_TIME automake --add-missing --copy && \
+        $CI_TIME autoconf || \
+        $CI_TIME autoreconf -fiv
+    fi
+    if [ -e ./configure ]; then
+        $CI_TIME ./configure "${CONFIG_OPTS[@]}"
+    else
+        mkdir build
+        cd build
+        $CI_TIME cmake .. -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_PREFIX_PATH=$BUILD_PREFIX
+    fi
+    if [ -e ./configure ]; then
+        $CI_TIME make -j4
+        $CI_TIME make install
+    else
+        $CI_TIME cmake --build . --config Release --target install
+    fi
+    cd "${BASE_PWD}"
+fi
+fold_end dependency.libzmq
+
+# Start of recipe for dependency: czmq
+fold_start dependency.czmq "Install dependency czmq"
+if ! ((command -v dpkg >/dev/null 2>&1 && dpkg -s libczmq-dev >/dev/null 2>&1) || \
+      (command -v brew >/dev/null 2>&1 && brew ls --versions czmq >/dev/null 2>&1)); then
+    BASE_PWD=${PWD}
+    cd tmp-deps
+    $CI_TIME git clone --quiet --depth 1 https://github.com/zeromq/czmq.git czmq
+    cd czmq
+    CCACHE_BASEDIR=${PWD}
+    export CCACHE_BASEDIR
+    git --no-pager log --oneline -n1
+    if [ -e autogen.sh ]; then
+        $CI_TIME ./autogen.sh 2> /dev/null
+    fi
+    if [ -e buildconf ]; then
+        $CI_TIME ./buildconf 2> /dev/null
+    fi
+    if [ ! -e autogen.sh ] && [ ! -e buildconf ] && [ ! -e ./configure ] && [ -s ./configure.ac ]; then
+        $CI_TIME libtoolize --copy --force && \
+        $CI_TIME aclocal -I . && \
+        $CI_TIME autoheader && \
+        $CI_TIME automake --add-missing --copy && \
+        $CI_TIME autoconf || \
+        $CI_TIME autoreconf -fiv
+    fi
+    if [ -e ./configure ]; then
+        $CI_TIME ./configure "${CONFIG_OPTS[@]}"
+    else
+        mkdir build
+        cd build
+        $CI_TIME cmake .. -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX -DCMAKE_PREFIX_PATH=$BUILD_PREFIX
+    fi
+    if [ -e ./configure ]; then
+        $CI_TIME make -j4
+        $CI_TIME make install
+    else
+        $CI_TIME cmake --build . --config Release --target install
+    fi
+    cd "${BASE_PWD}"
+fi
+fold_end dependency.czmq
+
 
 cd ../..
 

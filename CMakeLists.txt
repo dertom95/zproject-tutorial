@@ -99,6 +99,40 @@ set(OPTIONAL_LIBRARIES)
 set(OPTIONAL_LIBRARIES_STATIC)
 
 ########################################################################
+# LIBZMQ dependency
+########################################################################
+find_package(libzmq REQUIRED)
+IF (libzmq_FOUND)
+    include_directories(${libzmq_INCLUDE_DIRS})
+    list(APPEND MORE_LIBRARIES ${libzmq_LIBRARIES})
+  IF (PC_LIBZMQ_FOUND)
+      set(pkg_config_names_private "${pkg_config_names_private} libzmq")
+      list(APPEND OPTIONAL_LIBRARIES_STATIC ${PC_LIBZMQ_STATIC_LDFLAGS})
+  ELSE (PC_LIBZMQ_FOUND)
+      set(pkg_config_libs_private "${pkg_config_libs_private} -lzmq")
+  ENDIF (PC_LIBZMQ_FOUND)
+ELSE (libzmq_FOUND)
+    message( FATAL_ERROR "libzmq not found." )
+ENDIF (libzmq_FOUND)
+
+########################################################################
+# CZMQ dependency
+########################################################################
+find_package(czmq REQUIRED)
+IF (czmq_FOUND)
+    include_directories(${czmq_INCLUDE_DIRS})
+    list(APPEND MORE_LIBRARIES ${czmq_LIBRARIES})
+  IF (PC_CZMQ_FOUND)
+      set(pkg_config_names_private "${pkg_config_names_private} libczmq")
+      list(APPEND OPTIONAL_LIBRARIES_STATIC ${PC_CZMQ_STATIC_LDFLAGS})
+  ELSE (PC_CZMQ_FOUND)
+      set(pkg_config_libs_private "${pkg_config_libs_private} -lczmq")
+  ENDIF (PC_CZMQ_FOUND)
+ELSE (czmq_FOUND)
+    message( FATAL_ERROR "czmq not found." )
+ENDIF (czmq_FOUND)
+
+########################################################################
 # version
 ########################################################################
 set(ZPROTUT_VERSION_MAJOR 1)
@@ -308,6 +342,8 @@ if (TARGET zprotut)
 target_link_libraries(
     starter
     zprotut
+    ${LIBZMQ_LIBRARIES}
+    ${CZMQ_LIBRARIES}
     ${OPTIONAL_LIBRARIES}
 )
 endif()
@@ -315,6 +351,8 @@ if (NOT TARGET zprotut AND TARGET zprotut-static)
 target_link_libraries(
     starter
     zprotut-static
+    ${LIBZMQ_LIBRARIES}
+    ${CZMQ_LIBRARIES}
     ${OPTIONAL_LIBRARIES}
     ${OPTIONAL_LIBRARIES_STATIC}
 )
@@ -330,6 +368,8 @@ if (TARGET zprotut)
 target_link_libraries(
     zprotut_selftest
     zprotut
+    ${LIBZMQ_LIBRARIES}
+    ${CZMQ_LIBRARIES}
     ${OPTIONAL_LIBRARIES}
 )
 endif()
@@ -337,6 +377,8 @@ if (NOT TARGET zprotut AND TARGET zprotut-static)
 target_link_libraries(
     zprotut_selftest
     zprotut-static
+    ${LIBZMQ_LIBRARIES}
+    ${CZMQ_LIBRARIES}
     ${OPTIONAL_LIBRARIES}
     ${OPTIONAL_LIBRARIES_STATIC}
 )

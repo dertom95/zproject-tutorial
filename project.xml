@@ -9,6 +9,8 @@
     <class name = "shouter"/>
     <main name = "starter" />
 
+    <use project="czmq"/>
+
     <target name="docker"/>
     <target name="python"/>
     <target name="export"/>

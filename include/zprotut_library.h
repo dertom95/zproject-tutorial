@@ -36,6 +36,7 @@
 //  Set up environment for the application
 
 //  External dependencies
+#include <czmq.h>
 
 //  ZPROTUT version macros for compile-time API detection
 #define ZPROTUT_VERSION_MAJOR 1
@@ -46,26 +47,6 @@
     ((major) * 10000 + (minor) * 100 + (patch))
 #define ZPROTUT_VERSION \
     ZPROTUT_MAKE_VERSION(ZPROTUT_VERSION_MAJOR, ZPROTUT_VERSION_MINOR, ZPROTUT_VERSION_PATCH)
-
-// czmq_prelude.h bits
-#if !defined (__WINDOWS__)
-#   if (defined WIN32 || defined _WIN32 || defined WINDOWS || defined _WINDOWS)
-#       undef __WINDOWS__
-#       define __WINDOWS__
-#   endif
-#endif
-
-// Windows MSVS doesn't have stdbool
-#if (defined (_MSC_VER) && !defined (true))
-#   if (!defined (__cplusplus) && (!defined (true)))
-#       define true 1
-#       define false 0
-        typedef char bool;
-#   endif
-#else
-#   include <stdbool.h>
-#endif
-// czmq_prelude.h bits
 
 #if defined (__WINDOWS__)
 #   if defined ZPROTUT_STATIC
